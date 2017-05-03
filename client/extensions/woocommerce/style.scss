@@ -10,4 +10,163 @@
 
 	@import 'app/products/product-form';
 	@import 'components/form-dimensions-input/style';
+
+	.shipping__header {
+		margin-bottom: 0;
+		font-size: 20px;
+	}
+
+	.shipping__header-description {
+		color: $gray;
+	}
+
+	.shipping__address {
+		margin-bottom: 24px;
+
+		p {
+			margin-bottom: 0;
+
+			&.shipping__address-name {
+				font-weight: bold;
+			}
+		}
+	}
+
+	.shipping__zones {
+		padding: 0;
+	}
+
+	.shipping__zones-header {
+		background: $gray-light;
+	}
+
+	.shipping__zones-row {
+		display: flex;
+		flex-direction: row;
+		padding: 9px 0;
+
+		&:not( :last-child ) {
+			border-bottom: 1px solid lighten($gray, 20%);
+		}
+
+		.shipping__zones-row-icon {
+			width: 10%;
+			text-align: center;
+		}
+
+		.shipping__zones-row-location {
+			width: 35%;
+
+			.shipping__zones-row-location-name {
+				margin-bottom: 0;
+				font-size: 20px;
+			}
+
+			.shipping__zones-row-location-description {
+				margin-bottom: 0;
+				color: $gray;
+			}
+		}
+
+		.shipping__zones-row-method {
+			width: 35%;
+
+			.shipping__zones-row-method-name {
+				margin-bottom: 0;
+			}
+
+			.shipping__zones-row-method-description {
+				margin-bottom: 0;
+				color: $gray;
+			}
+		}
+
+		.shipping__zones-row-actions {
+			width: 20%;
+			text-align: center;
+		}
+	}
+
+	.shipping__cards-label {
+		margin-bottom: 0;
+	}
+
+	.shipping__card {
+		margin-bottom: 14px;
+	}
+
+	.shipping__card-checkbox {
+		margin-top: 10px;
+		margin-right: 20px;
+	}
+
+	.payment-logo {
+		float: left;
+		margin-top: 10px;
+		margin-right: 14px;
+	}
+
+	.shipping__card-details {
+		float: left;
+	}
+
+	.shipping__card-number {
+		margin-bottom: 0;
+		font-weight: bold;
+	}
+
+	.shipping__card-name {
+		margin-bottom: 0;
+		color: $gray;
+	}
+
+	.shipping__card-date {
+		float: right;
+		color: $gray;
+		font-style: italic;
+	}
+
+	.shipping__packages {
+		padding: 0;
+	}
+
+	.shipping__packages-header {
+		background: $gray-light;
+	}
+
+	.shipping__packages-row {
+		display: flex;
+		flex-direction: row;
+		padding: 9px 0;
+
+		&:not( :last-child ) {
+			border-bottom: 1px solid lighten($gray, 20%);
+		}
+
+		.shipping__packages-row-icon {
+			width: 10%;
+			text-align: center;
+
+			svg {
+				margin-top: 4px;
+			}
+		}
+
+		.shipping__packages-row-details {
+			width: 35%;
+
+			.shipping__packages-row-details-name {
+				font-size: 20px;
+			}
+		}
+
+		.shipping__packages-row-dimensions {
+			width: 35%;
+		}
+
+		.shipping__packages-row-actions {
+			width: 20%;
+			text-align: center;
+		}
+	}
 }

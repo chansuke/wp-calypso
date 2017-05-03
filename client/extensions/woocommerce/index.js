@@ -13,6 +13,7 @@ import { renderWithReduxStore } from 'lib/react-helpers';
 import ProductCreate from './app/products/product-create';
 import Dashboard from './app/dashboard';
 import StatsController from './app/stats/controller';
+import Shipping from './app/shipping';
 
 function addStorePage( storePage ) {
 	page( storePage.route, siteSelection, navigation, function( context ) {
@@ -78,15 +79,18 @@ export default function() {
 		},
 		{
 			container: Dashboard, // TODO use Dashboard as a placeholder until this page becomes available
-			configKey: 'woocommerce/extension-settings-shipping',
-			route: '/store/settings/:site/shipping',
-		},
-		{
-			container: Dashboard, // TODO use Dashboard as a placeholder until this page becomes available
 			configKey: 'woocommerce/extension-settings-tax',
 			route: '/store/settings/:site/tax',
 		},
 	];
+
+	if ( config.isEnabled( 'woocommerce/extension-shipping' ) ) {
+		storePages.push( {
+			container: Shipping,
+			configKey: 'woocommerce/extension-settings-shipping',
+			route: '/store/settings/:site/shipping',
+		} );
+	}
 
 	storePages.forEach( function( storePage ) {
 		if ( config.isEnabled( storePage.configKey ) ) {
