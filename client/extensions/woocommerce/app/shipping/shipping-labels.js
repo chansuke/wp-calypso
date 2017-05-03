@@ -39,7 +39,7 @@ class ShippingLabels extends Component {
 					</FormFieldSet>
 					<FormFieldSet>
 						<FormLabel className="shipping__cards-label">{ __( 'Credit card' ) }</FormLabel>
-						<p className="shipping__header-description">
+						<p className="shipping__header-description shipping__credit-card-description">
 							{ __( 'Pay for the labels you’ll print with the ' +
 								'credit card you pay for WordPress.com plan or add another one.' ) }
 						</p>

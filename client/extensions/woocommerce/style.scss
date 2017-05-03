@@ -26,6 +26,10 @@
 		line-height: 18px;
 	}
 
+	.shipping__credit-card-description {
+		margin-bottom: 4px;
+	}
+
 	.shipping__address {
 		margin-bottom: 24px;
 
@@ -62,6 +66,7 @@
 	.shipping__packages-header {
 		background: $gray-light;
 		padding: 8px 0;
+		font-size: 13px;
 	}
 
 	.shipping__zones-row-icon,
