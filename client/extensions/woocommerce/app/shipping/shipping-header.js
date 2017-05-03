@@ -14,8 +14,8 @@ class ShippingHeader extends Component {
 
 		const labelContent = (
 			<span>
-				<p className="shipping__header">{ label }</p>
-				<p className="shipping__header-description">{ description }</p>
+				<div className="shipping__header">{ label }</div>
+				<div className="shipping__header-description">{ description }</div>
 			</span>
 		);
 

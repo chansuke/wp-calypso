@@ -26,7 +26,7 @@ class ShippingPackage extends Component {
 				</div>
 				<div className="shipping__packages-row-dimensions">{ dimensions }</div>
 				<div className="shipping__packages-row-actions">
-					<Button>{ __( 'Edit' ) }</Button>
+					<Button compact>{ __( 'Edit' ) }</Button>
 				</div>
 			</div>
 		);

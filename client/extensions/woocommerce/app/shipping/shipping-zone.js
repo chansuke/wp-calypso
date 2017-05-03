@@ -27,7 +27,7 @@ class ShippingZone extends Component {
 					<p className="shipping__zones-row-method-description">{ methodDescription }</p>
 				</div>
 				<div className="shipping__zones-row-actions">
-					<Button>Edit</Button>
+					<Button compact>Edit</Button>
 				</div>
 			</div>
 		);

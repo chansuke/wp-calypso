@@ -15,7 +15,7 @@ import ShippingPackageList from './shipping-package-list';
 class Shipping extends Component {
 	render() {
 		return (
-			<Main className="woocommerce shipping" wideLayout={ true }>
+			<Main className="woocommerce shipping">
 				<ShippingOrigin />
 				<ShippingZoneList />
 				<ShippingLabels />

@@ -29,7 +29,7 @@ class ShippingLabels extends Component {
 				</ShippingHeader>
 				<Card>
 					<FormFieldSet>
-						<FormLabel htmlFor="paper-size">{ __( 'Paper size' ) }</FormLabel>
+						<FormLabel className="shipping__labels-paper-size" htmlFor="paper-size">{ __( 'Paper size' ) }</FormLabel>
 						<FormSelect name="paper-size">
 							<option>Letter</option>
 							<option>Legal</option>

@@ -8,8 +8,8 @@ import i18n from 'i18n-calypso';
  * Internal dependencies
  */
 import Card from 'components/card';
-import CompactCard from 'components/card/compact';
 import ShippingHeader from './shipping-header';
+import Notice from 'components/notice';
 
 class ShippingOrigin extends Component {
 	render() {
@@ -20,9 +20,12 @@ class ShippingOrigin extends Component {
 				<ShippingHeader
 					label={ __( 'Shipping Origin' ) }
 					description={ __( 'The address from which you will be shipping from' ) } />
-				<CompactCard>
-					{ __( 'This is the address you entered while signing up for a WordPress.com Store.' ) }
-				</CompactCard>
+				<Notice
+					status="is-info"
+					className="shipping__address-notice"
+					text={ __( 'This is the address you entered while signing up for a WordPress.com Store.' ) }
+					showDismiss={ true } >
+				</Notice>
 				<Card>
 					<div className="shipping__address">
 						<p className="shipping__address-name">Octopus Outlet Emporium</p>
