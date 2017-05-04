@@ -78,19 +78,16 @@ export default function() {
 			route: '/store/settings/:site/checkout',
 		},
 		{
+			container: Shipping,
+			configKey: 'woocommerce/extension-settings-shipping',
+			route: '/store/settings/:site/shipping',
+		},
+		{
 			container: Dashboard, // TODO use Dashboard as a placeholder until this page becomes available
 			configKey: 'woocommerce/extension-settings-tax',
 			route: '/store/settings/:site/tax',
 		},
 	];
-
-	if ( config.isEnabled( 'woocommerce/extension-shipping' ) ) {
-		storePages.push( {
-			container: Shipping,
-			configKey: 'woocommerce/extension-settings-shipping',
-			route: '/store/settings/:site/shipping',
-		} );
-	}
 
 	storePages.forEach( function( storePage ) {
 		if ( config.isEnabled( storePage.configKey ) ) {
