@@ -11,8 +11,25 @@ import Button from 'components/button';
 import Card from 'components/card';
 import ShippingHeader from './shipping-header';
 import ShippingZone from './shipping-zone';
+import ShippingZoneDialog from './shipping-zone-dialog';
 
 class ShippingZoneList extends Component {
+	constructor( props ) {
+		super( props );
+		this.state = { showDialog: false };
+
+		this.onAddZoneOpen = this.onAddZoneOpen.bind( this );
+		this.onAddZoneClose = this.onAddZoneClose.bind( this );
+	}
+
+	onAddZoneOpen() {
+		this.setState( { showDialog: true } );
+	}
+
+	onAddZoneClose() {
+		this.setState( { showDialog: false } );
+	}
+
 	render() {
 		const __ = i18n.translate;
 
@@ -21,7 +38,7 @@ class ShippingZoneList extends Component {
 				<ShippingHeader
 					label={ __( 'Shipping Zones' ) }
 					description={ __( 'Where you will ship and method of which you will ship to' ) }>
-					<Button>{ __( 'Add zone' ) }</Button>
+					<Button onClick={ this.onAddZoneOpen }>{ __( 'Add zone' ) }</Button>
 				</ShippingHeader>
 				<Card className="shipping__zones">
 					<div className="shipping__zones-row shipping__zones-header">
@@ -43,6 +60,7 @@ class ShippingZoneList extends Component {
 						methodDescription="All international services"
 						icon="globe" />
 				</Card>
+				<ShippingZoneDialog isVisible={ this.state.showDialog } onClose={ this.onAddZoneClose } />
 			</div>
 		);
 	}
