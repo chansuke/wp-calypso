@@ -3,7 +3,7 @@
  */
 import React, { Component } from 'react';
 import i18n from 'i18n-calypso';
-import clone from 'lodash/clone';
+import Gridicon from 'gridicons';
 
 /**
  * Internal dependencies
@@ -11,21 +11,56 @@ import clone from 'lodash/clone';
 import FormCurrencyInput from 'components/forms/form-currency-input';
 import FormCheckbox from 'components/forms/form-checkbox';
 import FormLabel from 'components/forms/form-label';
+import FormFieldSet from 'components/forms/form-fieldset';
+import Tooltip from 'components/tooltip';
 
 class LocalPickupMethod extends Component {
 	constructor( props ) {
 		super( props );
-		this.state = clone( props );
+		this.state = {
+			showTooltip: false,
+			...props
+		};
+
+		this.showTooltip = this.showTooltip.bind( this );
+		this.hideTooltip = this.hideTooltip.bind( this );
+	}
+
+	showTooltip() {
+		this.setState( { showTooltip: true } );
+	}
+
+	hideTooltip() {
+		this.setState( { showTooltip: false } );
 	}
 
 	render() {
 		const __ = i18n.translate;
 
 		return (
-			<div className="shipping-methods__method-container">
-				<FormLabel>{ __( 'How much will you charge for local pickup?' ) }</FormLabel>
-				<FormCurrencyInput currencySymbolPrefix="$" value={ this.state.price } />
-				<FormCheckbox checked={ this.state.taxable } /> Taxable
+			<div className="shipping-methods__method-container shipping-methods__local-pickup">
+				<FormFieldSet>
+					<FormLabel>{ __( 'How much will you charge for local pickup?' ) }</FormLabel>
+					<FormCurrencyInput currencySymbolPrefix="$" value={ this.state.price } />
+				</FormFieldSet>
+				<FormFieldSet>
+					<FormCheckbox checked={ this.state.taxable } className="shipping-methods__local-pickup-taxable" />
+					{ __( 'Taxable' ) }
+					<span
+						className="shipping-methods__local-pickup-taxable-help"
+						ref="taxableHelp"
+						onMouseEnter={ this.showTooltip }
+						onMouseLeave={ this.hideTooltip } >
+					<Gridicon icon="help-outline" size={ 18 } />
+					</span>
+					<Tooltip
+						isVisible={ this.state.showTooltip }
+						context={ this.refs && this.refs.taxableHelp }
+						className="shipping-methods__local-pickup-taxable-tooltip is-dialog-visible"
+						position="top">
+						Taxable explanation
+					</Tooltip>
+				</FormFieldSet>
 			</div>
 		);
 	}

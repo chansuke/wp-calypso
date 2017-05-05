@@ -97,6 +97,12 @@
 		text-align: center;
 	}
 
+	.shipping__labels-container.hidden {
+		height: 0;
+		padding: 0;
+		overflow: hidden;
+	}
+
 	.form-label.shipping__labels-paper-size,
 	.form-label.shipping__cards-label {
 		margin-bottom: 4px;
@@ -150,8 +156,9 @@
 	}
 
 	.shipping-methods__method-container {
-		padding: 24px;
+		padding: 20px;
 		border-bottom: 1px solid lighten($gray, 20%);
+		margin-bottom: 20px;
 	}
 
 	.shipping-methods__free-shipping-option {
@@ -162,5 +169,23 @@
 			width: 100px;
 			margin: 0 1em;
 		}
+	}
+
+	.shipping-methods__local-pickup {
+		.form-text-input-with-affixes {
+			width: 200px;
+		}
+	}
+
+	.shipping-methods__local-pickup-taxable {
+		margin-right: 7px;
+		margin-top: 4px;
+	}
+
+	.shipping-methods__local-pickup-taxable-help {
+		display: inline-block;
+		position: absolute;
+		margin-left: 4px;
+		margin-top: 3px;
 	}
 }

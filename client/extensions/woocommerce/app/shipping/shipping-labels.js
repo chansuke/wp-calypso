@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import i18n from 'i18n-calypso';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies
@@ -17,6 +18,18 @@ import ShippingCard from './shipping-card';
 import ShippingHeader from './shipping-header';
 
 class ShippingLabels extends Component {
+	constructor( props ) {
+		super( props );
+
+		this.state = { visible: true };
+
+		this.onToggle = this.onToggle.bind( this );
+	}
+
+	onToggle() {
+		this.setState( { visible: ! this.state.visible } );
+	}
+
 	render() {
 		const __ = i18n.translate;
 
@@ -25,9 +38,9 @@ class ShippingLabels extends Component {
 				<ShippingHeader
 					label={ __( 'Shipping Labels' ) }
 					description={ __( 'Print shipping labels at home' ) }>
-					<FormToggle	/>
+					<FormToggle onChange={ this.onToggle } checked={ this.state.visible } />
 				</ShippingHeader>
-				<Card>
+				<Card className={ classNames( 'shipping__labels-container', { hidden: ! this.state.visible } ) }>
 					<FormFieldSet>
 						<FormLabel className="shipping__labels-paper-size" htmlFor="paper-size">{ __( 'Paper size' ) }</FormLabel>
 						<FormSelect name="paper-size">

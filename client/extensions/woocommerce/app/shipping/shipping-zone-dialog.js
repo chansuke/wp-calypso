@@ -3,6 +3,7 @@
  */
 import React, { Component } from 'react';
 import i18n from 'i18n-calypso';
+import clone from 'lodash/clone';
 
 /**
  * Internal dependencies
@@ -20,36 +21,44 @@ import TokenField from 'components/token-field';
 class ShippingZoneDialog extends Component {
 	constructor( props ) {
 		super( props );
+
+		this.freeShippingDefaults = {
+			methodId: 'free',
+			everyone: true,
+			minSpend: 0
+		};
+
+		this.localPickupDefaults = {
+			methodId: 'local',
+			price: 0,
+			taxable: false
+		};
+
 		this.state = {
 			location: [],
-			shippingMethods: [ {
-				methodId: 'free',
-				everyone: true,
-				minSpend: 0
-			} ] };
+			shippingMethods: [ clone( this.freeShippingDefaults ) ] };
 
 		this.onLocationChange = this.onLocationChange.bind( this );
 		this.renderShippingMethod = this.renderShippingMethod.bind( this );
+		this.addMethod = this.addMethod.bind( this );
 	}
 
 	onLocationChange( location ) {
 		this.setState( { location } );
 	}
 
+	addMethod() {
+		const shippingMethods = this.state.shippingMethods;
+		shippingMethods.push( clone( this.freeShippingDefaults ) );
+		this.setState( { shippingMethods } );
+	}
+
 	changeShippingMethod( index, value ) {
 		const shippingMethods = this.state.shippingMethods;
 		if ( 'free' === value ) {
-			shippingMethods[ index ] = {
-				methodId: 'free',
-				everyone: true,
-				minSpend: 0
-			};
+			shippingMethods[ index ] = clone( this.freeShippingDefaults );
 		} else {
-			shippingMethods[ index ] = {
-				methodId: 'local',
-				price: 0,
-				taxable: false
-			};
+			shippingMethods[ index ] = clone( this.localPickupDefaults );
 		}
 
 		this.setState( { shippingMethods } );
@@ -103,11 +112,13 @@ class ShippingZoneDialog extends Component {
 						value={ this.state.location }
 						onChange={ this.onLocationChange } />
 				</FormFieldSet>
-				<FormFieldSet>
+				<div>
 					<FormLabel>{ __( 'Shipping method' ) }</FormLabel>
 					{ this.state.shippingMethods.map( this.renderShippingMethod ) }
+				</div>
+				<FormFieldSet>
+					<Button onClick={ this.addMethod }>{ __( 'Add another shipping method' ) }</Button>
 				</FormFieldSet>
-				<Button>{ __( 'Add another shipping method' ) }</Button>
 			</Dialog>
 		);
 	}
