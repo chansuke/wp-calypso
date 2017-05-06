@@ -37,7 +37,7 @@ class ShippingZoneList extends Component {
 			<div>
 				<ShippingHeader
 					label={ __( 'Shipping Zones' ) }
-					description={ __( 'Where you will ship and method of which you will ship to' ) }>
+					description={ __( 'The regions you ship to and the methods you will provide.' ) }>
 					<Button onClick={ this.onAddZoneOpen }>{ __( 'Add zone' ) }</Button>
 				</ShippingHeader>
 				<Card className="shipping__zones">

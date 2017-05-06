@@ -37,7 +37,7 @@ class ShippingLabels extends Component {
 			<div>
 				<ShippingHeader
 					label={ __( 'Shipping Labels' ) }
-					description={ __( 'Print shipping labels at home' ) }>
+					description={ __( 'Print shipping labels yourself.' ) }>
 					<FormToggle onChange={ this.onToggle } checked={ this.state.visible } />
 				</ShippingHeader>
 				<Card className={ classNames( 'shipping__labels-container', { hidden: ! this.state.visible } ) }>
@@ -53,8 +53,7 @@ class ShippingLabels extends Component {
 					<FormFieldSet>
 						<FormLabel className="shipping__cards-label">{ __( 'Credit card' ) }</FormLabel>
 						<p className="shipping__header-description shipping__credit-card-description">
-							{ __( 'Pay for the labels you’ll print with the ' +
-								'credit card you pay for WordPress.com plan or add another one.' ) }
+							{ __( 'Use your credit card on file to pay for the labels you print or add a new one.' ) }
 						</p>
 
 						<ShippingCard
@@ -63,7 +62,7 @@ class ShippingLabels extends Component {
 							name="Name Surname"
 							date="12/19" />
 
-						<Button>{ __( 'Add another credit card' ) }</Button>
+						<Button compact>{ __( 'Add another credit card' ) }</Button>
 					</FormFieldSet>
 				</Card>
 			</div>

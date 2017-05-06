@@ -20,7 +20,7 @@ class ShippingPackageList extends Component {
 			<div>
 				<ShippingHeader
 					label={ __( 'Packages' ) }
-					description={ __( 'Add any frequently used packages here to make fulfillment easier' ) }>
+					description={ __( 'Add frequently used packages to make fulfillment easier.' ) }>
 					<Button>{ __( 'Add package' ) }</Button>
 				</ShippingHeader>
 				<Card className="shipping__packages">

@@ -19,7 +19,7 @@ class ShippingOrigin extends Component {
 			<div>
 				<ShippingHeader
 					label={ __( 'Shipping Origin' ) }
-					description={ __( 'The address from which you will be shipping from' ) } />
+					description={ __( 'The address of where you will be shipping from.' ) } />
 				<Notice
 					status="is-info"
 					className="shipping__address-notice"
