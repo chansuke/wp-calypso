@@ -6,8 +6,6 @@
 }
 
 .woocommerce {
-	@import 'app/shipping/style';
-
 	flex-grow: 1;
 
 	@import 'app/products/product-form';

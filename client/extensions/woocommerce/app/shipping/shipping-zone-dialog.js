@@ -117,7 +117,7 @@ class ShippingZoneDialog extends Component {
 					{ this.state.shippingMethods.map( this.renderShippingMethod ) }
 				</div>
 				<FormFieldSet>
-					<Button onClick={ this.addMethod }>{ __( 'Add another shipping method' ) }</Button>
+					<Button compact onClick={ this.addMethod }>{ __( 'Add another shipping method' ) }</Button>
 				</FormFieldSet>
 			</Dialog>
 		);
