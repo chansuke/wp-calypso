@@ -2,6 +2,7 @@
  * External dependencies
  */
 import React, { Component } from 'react';
+import i18n from 'i18n-calypso';
 import Gridicon from 'gridicons';
 
 /**
@@ -11,6 +12,7 @@ import Button from 'components/button';
 
 class ShippingZone extends Component {
 	render() {
+		const __ = i18n.translate;
 		const { locationName, locationDescription, methodName, methodDescription, icon } = this.props;
 
 		return (
@@ -27,7 +29,7 @@ class ShippingZone extends Component {
 					<p className="shipping__zones-row-method-description">{ methodDescription }</p>
 				</div>
 				<div className="shipping__zones-row-actions">
-					<Button compact>Edit</Button>
+					<Button compact>{ __( 'Edit' ) }</Button>
 				</div>
 			</div>
 		);

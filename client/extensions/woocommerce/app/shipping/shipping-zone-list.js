@@ -16,7 +16,24 @@ import ShippingZoneDialog from './shipping-zone-dialog';
 class ShippingZoneList extends Component {
 	constructor( props ) {
 		super( props );
-		this.state = { showDialog: false };
+
+		//TODO: use redux state with real data
+		this.state = {
+			showDialog: false,
+			shippingZones: [ {
+				locationName: 'United States',
+				locationDescription: '50 states',
+				methodName: 'USPS',
+				methodDescription: 'All domestic services',
+				icon: 'location'
+			}, {
+				locationName: 'Rest of the world',
+				locationDescription: '240 countries',
+				methodName: 'USPS',
+				methodDescription: 'All international services',
+				icon: 'globe'
+			} ],
+		};
 
 		this.onAddZoneOpen = this.onAddZoneOpen.bind( this );
 		this.onAddZoneClose = this.onAddZoneClose.bind( this );
@@ -28,6 +45,10 @@ class ShippingZoneList extends Component {
 
 	onAddZoneClose() {
 		this.setState( { showDialog: false } );
+	}
+
+	renderShippingZone( zone, index ) {
+		return ( <ShippingZone key={ index } { ...zone } /> );
 	}
 
 	render() {
@@ -47,18 +68,7 @@ class ShippingZoneList extends Component {
 						<div className="shipping__zones-row-method">{ __( 'Shipping method' ) }</div>
 						<div className="shipping__zones-row-actions" />
 					</div>
-					<ShippingZone
-						locationName="United States"
-						locationDescription="50 states"
-						methodName="USPS"
-						methodDescription="All domestic services"
-						icon="location" />
-					<ShippingZone
-						locationName="Rest of the world"
-						locationDescription="240 countries"
-						methodName="USPS"
-						methodDescription="All international services"
-						icon="globe" />
+					{ this.state.shippingZones.map( this.renderShippingZone ) }
 				</Card>
 				<ShippingZoneDialog isVisible={ this.state.showDialog } onClose={ this.onAddZoneClose } />
 			</div>

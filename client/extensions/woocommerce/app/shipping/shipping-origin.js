@@ -12,6 +12,20 @@ import ShippingHeader from './shipping-header';
 import Notice from 'components/notice';
 
 class ShippingOrigin extends Component {
+	constructor( props ) {
+		super( props );
+
+		//TODO: use redux state and real data
+		this.state = {
+			address: {
+				name: 'Octopus Outlet Emporium',
+				street: '27 Main Street',
+				city: 'Ellington, CT 06029',
+				country: 'United States'
+			},
+		};
+	}
+
 	render() {
 		const __ = i18n.translate;
 
@@ -28,10 +42,10 @@ class ShippingOrigin extends Component {
 				</Notice>
 				<Card>
 					<div className="shipping__address">
-						<p className="shipping__address-name">Octopus Outlet Emporium</p>
-						<p>27 Main Street</p>
-						<p>Ellington, CT 06029</p>
-						<p>United States</p>
+						<p className="shipping__address-name">{ this.state.address.name }</p>
+						<p>{ this.state.address.street }</p>
+						<p>{ this.state.address.city }</p>
+						<p>{ this.state.address.country }</p>
 					</div>
 					<a>{ __( 'Edit address' ) }</a>
 				</Card>

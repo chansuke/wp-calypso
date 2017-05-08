@@ -27,7 +27,9 @@ class ShippingCard extends Component {
 						<p className="shipping__card-number">{ type } ****{ digits }</p>
 						<p className="shipping__card-name">{ name }</p>
 					</div>
-					<div className="shipping__card-date">{ __( 'Expires %(date)s', { args: { date } } ) }</div>
+					<div className="shipping__card-date">
+						{ __( 'Expires %(date)s', { args: { date } } ) }
+					</div>
 				</div>
 			</CompactCard>
 		);

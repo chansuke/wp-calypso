@@ -13,6 +13,27 @@ import ShippingHeader from './shipping-header';
 import ShippingPackage from './shipping-package';
 
 class ShippingPackageList extends Component {
+	constructor( props ) {
+		super( props );
+
+		//TODO: use redux state and real data
+		this.state = {
+			packages: [ {
+				type: 'box',
+				name: 'Custom Box',
+				dimensions: '10 x 10 x 10 in'
+			}, {
+				type: 'envelope',
+				name: 'Custom Envelope',
+				dimensions: '12 x 9 x 0.5 in'
+			} ],
+		};
+	}
+
+	renderShippingPackage( pckg, index ) {
+		return ( <ShippingPackage key={ index } { ...pckg } /> );
+	}
+
 	render() {
 		const __ = i18n.translate;
 
@@ -30,14 +51,7 @@ class ShippingPackageList extends Component {
 						<div className="shipping__packages-row-dimensions">{ __( 'Dimensions' ) }</div>
 						<div className="shipping__packages-row-actions" />
 					</div>
-					<ShippingPackage
-						type="box"
-						name="Custom Box"
-						dimensions="10 x 10 x 10 in" />
-					<ShippingPackage
-						type="envelope"
-						name="Custom Envelope"
-						dimensions="12 x 9 x 0.5 in" />
+					{ this.state.packages.map( this.renderShippingPackage ) }
 				</Card>
 			</div>
 		);

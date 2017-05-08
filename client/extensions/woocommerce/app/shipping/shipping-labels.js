@@ -21,7 +21,16 @@ class ShippingLabels extends Component {
 	constructor( props ) {
 		super( props );
 
-		this.state = { visible: true };
+		//TODO: use redux state with real data
+		this.state = {
+			visible: true,
+			cardData: {
+				type: 'VISA',
+				digits: '1234',
+				name: 'Name Surname',
+				date: '12/19'
+			}
+		};
 
 		this.onToggle = this.onToggle.bind( this );
 	}
@@ -42,25 +51,28 @@ class ShippingLabels extends Component {
 				</ShippingHeader>
 				<Card className={ classNames( 'shipping__labels-container', { hidden: ! this.state.visible } ) }>
 					<FormFieldSet>
-						<FormLabel className="shipping__labels-paper-size" htmlFor="paper-size">{ __( 'Paper size' ) }</FormLabel>
+						<FormLabel
+							className="shipping__labels-paper-size"
+							htmlFor="paper-size">
+							{ __( 'Paper size' ) }
+						</FormLabel>
 						<FormSelect name="paper-size">
-							<option>Letter</option>
-							<option>Legal</option>
-							<option>Label (4"x6")</option>
-							<option>A4</option>
+							<option>{ __( 'Letter' ) }</option>
+							<option>{ __( 'Legal' ) }</option>
+							<option>{ __( 'Label (4"x6")' ) }</option>
+							<option>{ __( 'A4' ) }</option>
 						</FormSelect>
 					</FormFieldSet>
 					<FormFieldSet>
-						<FormLabel className="shipping__cards-label">{ __( 'Credit card' ) }</FormLabel>
+						<FormLabel
+							className="shipping__cards-label">
+							{ __( 'Credit card' ) }
+						</FormLabel>
 						<p className="shipping__header-description shipping__credit-card-description">
 							{ __( 'Use your credit card on file to pay for the labels you print or add a new one.' ) }
 						</p>
 
-						<ShippingCard
-							type="VISA"
-							digits="1234"
-							name="Name Surname"
-							date="12/19" />
+						<ShippingCard { ...this.state.cardData } />
 
 						<Button compact>{ __( 'Add another credit card' ) }</Button>
 					</FormFieldSet>
