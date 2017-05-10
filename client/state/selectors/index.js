@@ -159,6 +159,7 @@ export isSharingButtonsSaveSuccessful from './is-sharing-buttons-save-successful
 export isSiteAutomatedTransfer from './is-site-automated-transfer';
 export isSiteBlocked from './is-site-blocked';
 export isSiteOnFreePlan from './is-site-on-free-plan';
+export isSiteOnPaidPlan from './is-site-on-paid-plan';
 export isSiteSupportingImageEditor from './is-site-supporting-image-editor';
 export isSiteUpgradeable from './is-site-upgradeable';
 export isVipSite from './is-vip-site';
