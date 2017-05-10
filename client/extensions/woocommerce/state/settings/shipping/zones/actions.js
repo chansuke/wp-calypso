@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import { omit, sortBy, first, remove } from 'lodash';
+
+/**
  * Internal dependencies
  */
 import {
@@ -24,26 +29,47 @@ import {
 } from '../../../action-types';
 import * as api from '../../../helpers/api';
 
+const removeOrder = ( collection ) => collection.map( ( elem ) => omit( elem, 'order' ) );
+const removeLinks = ( data ) => omit( data, '_links' );
+
 export const fetchServerData = () => ( dispatch, getState ) => {
 	// TODO: Prevent duplicate requests on subsequent fetchServerData calls
 	const state = getState();
 	api.get( 'shipping/zones', state )
 		.then( ( zones ) => {
-			dispatch( { type: WOOCOMMERCE_SHIPPING_ZONES_FETCH_SUCCESS, zones } );
+			const restOfWorldZone = first( remove( zones, { id: 0 } ) );
+			if ( ! restOfWorldZone ) {
+				throw new Error( 'The server didn\'t provide a "Rest Of The World" shipping zone' );
+			}
+			dispatch( {
+				type: WOOCOMMERCE_SHIPPING_ZONES_FETCH_SUCCESS,
+				zones: removeOrder( removeLinks( [ ...sortBy( zones, 'order' ), restOfWorldZone ] ) ),
+			} );
 			zones.forEach( ( { id } ) => {
 				if ( id ) { // No need to fetch locations from "Rest of the world" zone (id=0)
 					api.get( `shipping/zones/${ id }/locations`, state )
-						.then( ( locations ) => dispatch( { type: WOOCOMMERCE_SHIPPING_ZONE_LOCATIONS_FETCH_SUCCESS, id, locations } ) )
+						.then( ( locations ) => dispatch( {
+							type: WOOCOMMERCE_SHIPPING_ZONE_LOCATIONS_FETCH_SUCCESS,
+							id,
+							locations: removeLinks( locations ),
+						} ) )
 						.catch( ( error ) => dispatch( { type: WOOCOMMERCE_SHIPPING_ZONE_LOCATIONS_FETCH_ERROR, error } ) );
 				}
 				api.get( `shipping/zones/${ id }/methods`, state )
-					.then( ( methods ) => dispatch( { type: WOOCOMMERCE_SHIPPING_ZONE_METHODS_FETCH_SUCCESS, id, methods } ) )
+					.then( ( methods ) => dispatch( {
+						type: WOOCOMMERCE_SHIPPING_ZONE_METHODS_FETCH_SUCCESS,
+						id,
+						methods: removeOrder( removeLinks( sortBy( methods, 'order' ) ) ),
+					} ) )
 					.catch( ( error ) => dispatch( { type: WOOCOMMERCE_SHIPPING_ZONE_METHODS_FETCH_ERROR, error } ) );
 			} );
 		} )
 		.catch( ( error ) => dispatch( { type: WOOCOMMERCE_SHIPPING_ZONES_FETCH_ERROR, error } ) );
 	api.get( 'shipping_methods', state )
-		.then( ( methods ) => dispatch( { type: WOOCOMMERCE_SHIPPING_METHODS_FETCH_SUCCESS, methods } ) )
+		.then( ( methods ) => dispatch( {
+			type: WOOCOMMERCE_SHIPPING_METHODS_FETCH_SUCCESS,
+			methods: removeLinks( methods ),
+		} ) )
 		.catch( ( error ) => dispatch( { type: WOOCOMMERCE_SHIPPING_METHODS_FETCH_ERROR, error } ) );
 };
 

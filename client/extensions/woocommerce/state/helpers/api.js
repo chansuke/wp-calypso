@@ -11,10 +11,20 @@ const request = ( func, path, state, body = {} ) => {
 		.then( ( { data } ) => data );
 };
 
+const addParam = ( url, param ) => url + ( -1 !== url.indexOf( '?' ) ? '?' : '&' ) + param;
+
 export const get = ( path, state ) => {
 	return request( wp.req.get, path, state );
 };
 
 export const post = ( path, body, state ) => {
 	return request( wp.req.post, path, state, body );
+};
+
+export const put = ( path, body, state ) => {
+	return request( wp.req.post, addParam( path, '_method=put' ), state, body );
+};
+
+export const del = ( path, state ) => {
+	return request( wp.req.post, addParam( path, '_method=delete' ), state );
 };

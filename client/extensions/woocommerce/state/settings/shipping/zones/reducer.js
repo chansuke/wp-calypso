@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { isEqual, unionWith, differenceWith, isEmpty, find, findIndex, isArray, every } from 'lodash';
+import { isEqual, unionWith, differenceWith, isEmpty, pick, findIndex, isArray, every, mapValues } from 'lodash';
 
 /**
  * Internal dependencies
@@ -68,7 +68,10 @@ export default createReducer( {}, {
 	},
 
 	[ WOOCOMMERCE_SHIPPING_ZONE_REMOVE ]: ( state, { index } ) => {
-		// TODO: Protect { id: 0 } (Rest of the World)
+		// Protect { id: 0 } (Rest of the World) from deletion
+		if ( 0 === state.zones[ index ].id ) {
+			return state;
+		}
 		return { ...state,
 			currentlyEditingZone: null,
 			zones: [ ...state.zones.slice( 0, index ), ...state.zones.slice( index + 1 ) ],
@@ -82,13 +85,13 @@ export default createReducer( {}, {
 	},
 
 	[ WOOCOMMERCE_SHIPPING_ZONE_CLOSE ]: ( state ) => {
-		// TODO: Keep "Rest Of The World" last always
 		if ( ! state.currentlyEditingZone ) {
 			return state;
 		}
 		const zones = [ ...state.zones ];
 		if ( -1 === state.currentlyEditingZoneIndex ) {
-			zones.push( state.currentlyEditingZone );
+			// Keep "Rest Of The World" last always
+			zones.splice( zones.length - 1, 0, state.currentlyEditingZone );
 		} else {
 			zones[ state.currentlyEditingZoneIndex ] = state.currentlyEditingZone;
 		}
@@ -101,7 +104,9 @@ export default createReducer( {}, {
 	[ WOOCOMMERCE_SHIPPING_ZONE_LOCATION_ADD ]: ( state, { locationType, locationCode } ) => {
 		// TODO: ZIP codes
 		// TODO: Get the list of continents / countries / states from somewhere (new endpoint?)
-		if ( ! state.currentlyEditingZone || ! LOCATION_TYPES.includes( locationType ) ) {
+		if ( ! state.currentlyEditingZone ||
+			0 === state.currentlyEditingZone.id ||
+			! LOCATION_TYPES.includes( locationType ) ) {
 			return state;
 		}
 		const location = { type: locationType, code: locationCode };
@@ -132,9 +137,10 @@ export default createReducer( {}, {
 			return state;
 		}
 		const currentMethods = state.currentlyEditingZone.methods;
+		const methodDefinition = { method_id: state.methodDefinitions[ 0 ].id, id: null };
 		return { ...state,
 			currentlyEditingZone: { ...state.currentlyEditingZone,
-				methods: [ ...currentMethods, state.methodDefinitions[ 0 ] ],
+				methods: [ ...currentMethods, methodDefinition ],
 			},
 		};
 	},
@@ -144,10 +150,10 @@ export default createReducer( {}, {
 			return state;
 		}
 		const { methods } = state.currentlyEditingZone;
-		if ( methods[ index ].type === newType ) {
+		if ( methods[ index ].method_id === newType ) {
 			return state;
 		}
-		const newMethodDefinition = find( state.methodDefinitions, { id: newType } );
+		const newMethodDefinition = { method_id: newType, id: null };
 		return { ...state,
 			currentlyEditingZone: { ...state.currentlyEditingZone,
 				methods: [ ...methods.slice( 0, index ), newMethodDefinition, ...methods.slice( index + 1 ) ],
@@ -244,7 +250,11 @@ export default createReducer( {}, {
 			return state;
 		}
 		const zone = { ...serverZones[ index ],
-			methods,
+			methods: methods.map( ( methodDefinition ) => ( {
+				...pick( methodDefinition, [ 'enabled', 'method_id' ] ),
+				id: methodDefinition.instance_id,
+				...mapValues( methodDefinition.settings, 'value' ),
+			} ) ),
 		};
 		return updateZonesIfAllLoaded( { ...state,
 			serverZones: [ ...serverZones.slice( 0, index ), zone, ...serverZones.slice( index + 1 ) ],
