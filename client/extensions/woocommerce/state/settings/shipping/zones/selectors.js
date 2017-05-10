@@ -18,8 +18,8 @@ const getOperationsToUpdateMethod = ( method, serverMethod, zoneId ) => ( instan
 			zoneId,
 			id: instanceId,
 			payload: {
-				...pick( method, 'enabled' ),
-				settings: omit( method, [ 'id', 'enabled', 'method_id' ] ),
+				...pick( method, [ 'enabled', 'order' ] ),
+				settings: omit( method, [ 'id', 'enabled', 'order', 'method_id' ] ),
 			},
 		} ];
 	}

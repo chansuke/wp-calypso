@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { isEqual, unionWith, differenceWith, isEmpty, pick, findIndex, isArray, every, mapValues } from 'lodash';
+import { isEqual, unionWith, differenceWith, isEmpty, pick, findIndex, isArray, every, mapValues, remove, sortBy } from 'lodash';
 
 /**
  * Internal dependencies
@@ -10,7 +10,6 @@ import { createReducer } from 'state/utils';
 import {
 	WOOCOMMERCE_SHIPPING_METHODS_FETCH_ERROR,
 	WOOCOMMERCE_SHIPPING_METHODS_FETCH_SUCCESS,
-	WOOCOMMERCE_SHIPPING_SETTINGS_SAVE_SUCCESS,
 	WOOCOMMERCE_SHIPPING_ZONE_ADD,
 	WOOCOMMERCE_SHIPPING_ZONE_CANCEL,
 	WOOCOMMERCE_SHIPPING_ZONE_CLOSE,
@@ -31,6 +30,8 @@ import {
 } from '../../../action-types';
 
 const LOCATION_TYPES = [ 'postcode', 'state', 'country', 'continent' ];
+
+// TODO: reorder zones (do we need it for MVP?)
 
 /**
  * Checks if all the zones, shipping methods and zone locations have finished loading from the API.
@@ -55,6 +56,7 @@ export default createReducer( {}, {
 				id: null,
 				locations: [],
 				methods: [],
+				order: ( ( state.zones[ state.zones.length - 2 ] || {} ).order || 0 ) + 1,
 			},
 			currentlyEditingZoneIndex: -1,
 		};
@@ -137,7 +139,11 @@ export default createReducer( {}, {
 			return state;
 		}
 		const currentMethods = state.currentlyEditingZone.methods;
-		const methodDefinition = { method_id: state.methodDefinitions[ 0 ].id, id: null };
+		const methodDefinition = {
+			method_id: state.methodDefinitions[ 0 ].id,
+			id: null,
+			order: ( ( currentMethods[ currentMethods.length - 1 ] || {} ).order || 0 ) + 1,
+		};
 		return { ...state,
 			currentlyEditingZone: { ...state.currentlyEditingZone,
 				methods: [ ...currentMethods, methodDefinition ],
@@ -153,7 +159,11 @@ export default createReducer( {}, {
 		if ( methods[ index ].method_id === newType ) {
 			return state;
 		}
-		const newMethodDefinition = { method_id: newType, id: null };
+		const newMethodDefinition = {
+			method_id: newType,
+			id: null,
+			order: methods[ index ].order,
+		};
 		return { ...state,
 			currentlyEditingZone: { ...state.currentlyEditingZone,
 				methods: [ ...methods.slice( 0, index ), newMethodDefinition, ...methods.slice( index + 1 ) ],
@@ -244,6 +254,7 @@ export default createReducer( {}, {
 	},
 
 	[ WOOCOMMERCE_SHIPPING_ZONE_METHODS_FETCH_SUCCESS ]: ( state, { id, methods } ) => {
+		methods = sortBy( methods, 'order' );
 		const { serverZones } = state;
 		const index = findIndex( serverZones, { id } );
 		if ( -1 === index ) {
@@ -251,7 +262,7 @@ export default createReducer( {}, {
 		}
 		const zone = { ...serverZones[ index ],
 			methods: methods.map( ( methodDefinition ) => ( {
-				...pick( methodDefinition, [ 'enabled', 'method_id' ] ),
+				...pick( methodDefinition, [ 'enabled', 'method_id', 'order' ] ),
 				id: methodDefinition.instance_id,
 				...mapValues( methodDefinition.settings, 'value' ),
 			} ) ),
@@ -268,15 +279,13 @@ export default createReducer( {}, {
 	},
 
 	[ WOOCOMMERCE_SHIPPING_ZONES_FETCH_SUCCESS ]: ( state, { zones } ) => {
+		zones = { ...zones };
+		const restOfWorldZone = remove( zones, { id: 0 } )[ 0 ];
+		if ( ! restOfWorldZone ) {
+			throw new Error( 'The server didn\'t provide a "Rest Of The World" shipping zone' );
+		}
 		return updateZonesIfAllLoaded( { ...state,
-			serverZones: zones,
+			serverZones: [ ...sortBy( zones, 'order' ), restOfWorldZone ],
 		} );
-	},
-
-	[ WOOCOMMERCE_SHIPPING_SETTINGS_SAVE_SUCCESS ]: ( state ) => {
-		return { ...state,
-			currentlyEditingZone: null,
-			serverZones: state.zones,
-		};
 	},
 } );

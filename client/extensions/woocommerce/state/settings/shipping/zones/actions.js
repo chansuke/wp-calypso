@@ -31,7 +31,6 @@ import {
 import * as api from '../../../helpers/api';
 import { getOperationsToSaveZonesSettings } from './selectors';
 
-const removeOrder = ( collection ) => collection.map( ( elem ) => omit( elem, 'order' ) );
 const removeLinks = ( data ) => omit( data, '_links' );
 
 export const fetchServerData = () => ( dispatch, getState ) => {
@@ -39,13 +38,9 @@ export const fetchServerData = () => ( dispatch, getState ) => {
 	const state = getState();
 	api.get( 'shipping/zones', state )
 		.then( ( zones ) => {
-			const restOfWorldZone = first( remove( zones, { id: 0 } ) );
-			if ( ! restOfWorldZone ) {
-				throw new Error( 'The server didn\'t provide a "Rest Of The World" shipping zone' );
-			}
 			dispatch( {
 				type: WOOCOMMERCE_SHIPPING_ZONES_FETCH_SUCCESS,
-				zones: removeOrder( removeLinks( [ ...sortBy( zones, 'order' ), restOfWorldZone ] ) ),
+				zones: removeLinks( zones ),
 			} );
 			zones.forEach( ( { id } ) => {
 				if ( id ) { // No need to fetch locations from "Rest of the world" zone (id=0)
@@ -61,7 +56,7 @@ export const fetchServerData = () => ( dispatch, getState ) => {
 					.then( ( methods ) => dispatch( {
 						type: WOOCOMMERCE_SHIPPING_ZONE_METHODS_FETCH_SUCCESS,
 						id,
-						methods: removeOrder( removeLinks( sortBy( methods, 'order' ) ) ),
+						methods: removeLinks( methods ),
 					} ) )
 					.catch( ( error ) => dispatch( { type: WOOCOMMERCE_SHIPPING_ZONE_METHODS_FETCH_ERROR, error } ) );
 			} );
