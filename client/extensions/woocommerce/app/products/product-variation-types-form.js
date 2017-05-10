@@ -3,7 +3,7 @@
  */
 import React, { Component, PropTypes } from 'react';
 import i18n from 'i18n-calypso';
-import { find } from 'lodash';
+import { find, debounce } from 'lodash';
 
 /**
  * Internal dependencies
@@ -31,13 +31,19 @@ export default class ProductVariationTypesForm extends Component {
 		if ( ! product.attributes ) {
 			this.addType();
 		}
+
+		this.debouncedUpdateName = debounce( this.updateName, 300 );
 	}
 
 	constructor( props ) {
 		super( props );
 
+		this.state = {
+			attributeNames: [],
+		};
+
 		this.addType = this.addType.bind( this );
-		this.updateName = this.updateName.bind( this );
+		this.updateNameHandler = this.updateNameHandler.bind( this );
 		this.updateValues = this.updateValues.bind( this );
 	}
 
@@ -54,12 +60,19 @@ export default class ProductVariationTypesForm extends Component {
 		editProductAttribute( product, null, this.getNewFields() );
 	}
 
-	updateName( e ) {
+	updateNameHandler( e ) {
+		const attributeNames = [ ...this.state.attributeNames ];
+		attributeNames[ e.target.id ] = e.target.value;
+		this.setState( { attributeNames } );
+		this.debouncedUpdateName( e.target.id, e.target.value );
+	}
+
+	updateName( attributeId, name ) {
 		const { product, editProductAttribute } = this.props;
 		const attribute = product.attributes && find( product.attributes, function( a ) {
-			return a.uid === e.target.id;
+			return a.uid === attributeId;
 		} );
-		editProductAttribute( product, attribute, { name: e.target.value } );
+		editProductAttribute( product, attribute, { name } );
 	}
 
 	updateValues( values, attribute ) {
@@ -68,15 +81,17 @@ export default class ProductVariationTypesForm extends Component {
 	}
 
 	renderInputs( attribute ) {
+		const { attributeNames } = this.state;
+		const attributeName = attributeNames && attributeNames[ attribute.uid ] || attribute.name;
 		return (
 			<div key={ attribute.uid } className="products__variation-types-form-fieldset">
 				<FormTextInput
 					placeholder={ i18n.translate( 'Color' ) }
-					value={ attribute.name }
+					value={ attributeName }
 					id={ attribute.uid }
 					name="type"
 					className="products__variation-types-form-field"
-					onChange={ this.updateName }
+					onChange={ this.updateNameHandler }
 				/>
 				<TokenField
 					placeholder={ i18n.translate( 'Comma separate these' ) }
