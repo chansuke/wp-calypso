@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { get, some } from 'lodash';
+import { filter, get } from 'lodash';
 
 /**
  * Internal dependencies
@@ -23,10 +23,13 @@ export default function findThemeFilterTerm( state, search ) {
 
 	const filters = getThemeFilters( state );
 
-	let ret;
-	some( filters, ( terms ) => {
-		ret = get( terms, left );
-		return !! ret;
+	const results = filter( filters, ( terms ) => {
+		return !! get( terms, left );
 	} );
-	return ret;
+
+	if ( results.length !== 1 ) {
+		// No or ambiguous results
+		return null;
+	}
+	return results[ 0 ][ left ];
 }
